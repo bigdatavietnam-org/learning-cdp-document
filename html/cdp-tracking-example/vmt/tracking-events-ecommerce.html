@@ -14,12 +14,10 @@
             text-align: center;
             font-family: arial;
         }
-
         .price {
             color: grey;
             font-size: 22px;
         }
-
         .card button {
             border: none;
             outline: 0;
@@ -31,9 +29,11 @@
             width: 100%;
             font-size: 18px;
         }
-
         .card button:hover {
             opacity: 0.7;
+        }
+        #product-info {
+            padding: 50px;
         }
     </style>
 
@@ -44,6 +44,7 @@
     <h3 id="user-info">Hi Visitor</h3>
     <p>Điền email của bạn để xem sản phẩm</p>
     <input id="user-email" type="email" name="email" placeholder="Điền email của bạn để xem sản phẩm">
+    
     <p>
         <button id="btn-user-login" onclick="processUserLogin(this)">Login</button>
     </p>
@@ -53,29 +54,25 @@
             alt="Denim Jeans" style="width:100%">
         <h3>Customer Data Platforms</h3>
         <p class="price">$25</p>
-        <p>Use People Data to Transform the Future of Marketing Engagement.</p>
+        
         <p><button disabled="disabled" id="btn-add-to-cart" onclick="processAddToCart(this)">Add to cart</button></p>
-        <p><button  disabled="disabled" id="btn-purchase" onclick="processPurchasing(this)" style="display: none;">Purchase</button></p>
+        <p><button disabled="disabled" id="btn-purchase" onclick="processPurchasing(this)" style="display: none;">Purchase</button></p>
+        <p>
+            Bàn về xu hướng với chủ đề Customer Data Platforms (CDP) — đồng tác giả cuốn sách “Customer Data Platforms: Use
+            People Data to Transform the Future of Marketing Engagement “ Chris O’Hara và Martin Kihn. <br>
+            O’Hara hiện là Global Product Marketing của Salesforce, và qua cuốn sách ông đã chia sẻ góc nhìn về việc áp dụng
+            các phương pháp, nguyên tắc có thể nắm bắt, hợp nhất, chủ động dựa trên tổng hợp, phân tích hành trình số của
+            khách hàng. Mục tiêu của CDP là giúp các doanh nghiệp cung cấp trải nghiệm được tối ưu, cá nhân hóa : đúng đối
+            tượng, đúng thời điểm, đúng thông điệp nội dung cần truyền tải ”right person, right message, right time”.
+    
+            Sách có bản kindle khá tiện để mua và đọc :)
+            <a target="_blank"
+                href="https://www.amazon.com/gp/customer-reviews/R3KPLOJWJTW0MK/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1119790115l">Book
+                Link Review trên Amazon </a>
+        </p>
     </div>
-
-    <p>
-        Bàn về xu hướng với chủ đề Customer Data Platforms (CDP) — đồng tác giả cuốn sách “Customer Data Platforms: Use
-        People Data to Transform the Future of Marketing Engagement “ Chris O’Hara và Martin Kihn.
-        O’Hara hiện là Global Product Marketing của Salesforce, và qua cuốn sách ông đã chia sẻ góc nhìn về việc áp dụng
-        các phương pháp, nguyên tắc có thể nắm bắt, hợp nhất, chủ động dựa trên tổng hợp, phân tích hành trình số của
-        khách hàng. Mục tiêu của CDP là giúp các doanh nghiệp cung cấp trải nghiệm được tối ưu, cá nhân hóa : đúng đối
-        tượng, đúng thời điểm, đúng thông điệp nội dung cần truyền tải…”right person, right message, right time”.
-
-        Sách có bản kindle khá tiện để mua và đọc :)
-
-        Link amazon :
-        <a target="_blank"
-            href="https://www.amazon.com/gp/customer-reviews/R3KPLOJWJTW0MK/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1119790115l">Book
-            Review</a>
-
-    </p>
-
-    <!-- Data Model for LEO Observer JS -->
+    
+    <!-- Data Model for CDP Observer JS -->
     <script>
         // to synch user data into Leo CDP using JavaScript
         var userInfo = {};
@@ -84,9 +81,10 @@
         userInfo["email"] = "thomas@example.com";
         userInfo["firstName"] = "Thomas";
         userInfo["lastName"] = "Moore";
+        userInfo["dataLabels"] = "tester; demo; cdp-test";
 
         // to synch product data into CDP using JavaScript
-        var productInfo = {
+        var currentProductInfo = {
             name: "Customer Data Platforms",
             description: "the book about Customer Data Platform (CDP) for beginners",
             itemId: "978-1119790112",
@@ -104,36 +102,36 @@
 
         // the shopping cart items
         var shoppingCartItems = shoppingCartItems || [];
-    </script>
 
-    <script>
-        // example function to collect user's email for CDP
+        // 1 example function to collect user's email for CDP
         function processUserLogin(node) {
             userInfo['email'] = $('#user-email').val();
             $('#user-info').text("Test User Login for email: " + userInfo['email'])
-            alert('The user-login event is tracked!');
+            alert('user-login event đã lưu OK vào CDP');
             LeoObserver.recordEventUserLogin(userInfo);
-
             $('#btn-add-to-cart, #btn-purchase').removeAttr('disabled');
             $('#product-info').show()
         }
-        // example function to collect add-to-cart item
+
+        // 2 example function to collect add-to-cart item
         function processAddToCart(node) {
-            alert('The add-to-cart event is tracked!');
+            alert('add-to-cart event đã lưu OK vào CDP');
             $(node).hide();
             $('#btn-purchase').show().css("background-color", "blue");
 
-            shoppingCartItems.push(productInfo);
-            LeoObserver.recordEventAddToCart(productInfo)
+            shoppingCartItems.push(currentProductInfo);
+            LeoObserver.recordEventAddToCart(currentProductInfo)
         }
-        // example function to collect purchaded item
+
+        // 3 example function to collect purchaded item
         function processPurchasing(node) {
-            alert('The purchase event is tracked!');
+            alert('purchase event đã lưu OK vào CDP');
             $(node).css("background-color", "green").text("Purchased OK").attr("disabled", true);
 
             //set a global transaction ID for Google Tag Manager can fire purchase event with a transaction info
             window.transactionId = "transaction_demo_" + new Date().getTime();
             LeoObserver.recordEventPurchase([], shoppingCartItems, window.transactionId, 25, "USD");
+            shoppingCartItems = [];
         }
     </script>
 
@@ -144,11 +142,11 @@
             // 1. Journey Data Hub => Data Journey Map. 
             // 2. Click on Event Observer
             // 3. Click on the button "Get Code" of Touchpoint Hub
-            window.leoObserverId = "7gMWEg2kzbEV7xNuiGQD0q";
+            window.leoObserverId = "1gWdlFee5griAtyJKFyg1p";
 
             // This code is got from demo CDP at https://dcdp.bigdatavietnam.org
-            window.leoObserverLogDomain = "datahub4dcdp.bigdatavietnam.org";
-            window.leoObserverCdnDomain = "static.leocdp.com";
+            window.leoObserverLogDomain = "vmt-datahub.dragoncdp.vn";
+  	        window.leoObserverCdnDomain = "cdn.jsdelivr.net/gh/USPA-Technology/leo-cdp-static-files@v0.8.9.31/";
 
             // Set default Touchpoint Metadata 
             window.srcTouchpointName = encodeURIComponent(document.title);
