@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Basic Tracking Demo for Leo CDP - Customer Data Platform book</title>
+    <title>Basic Tracking Demo - Quy trình mua sách về Customer Data Platform của 1 ecommerce user</title>
     <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=1" name="viewport"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -40,12 +40,15 @@
 </head>
 
 <body>
-    <h1 id="user-info">Hi Visitor</h1>
-    <input id="user-email" type="email" name="email" placeholder="Enter your email address">
+    <h1>Basic Tracking Demo - Quy trình mua sách về Customer Data Platform của 1 ecommerce user</h1>
+    <h3 id="user-info">Hi Visitor</h3>
+    <p>Điền email của bạn để xem sản phẩm</p>
+    <input id="user-email" type="email" name="email" placeholder="Điền email của bạn để xem sản phẩm">
     <p>
         <button id="btn-user-login" onclick="processUserLogin(this)">Login</button>
     </p>
-    <div class="card">
+    
+    <div class="card" id="product-info" style="display: none;">
         <img src="https://images-na.ssl-images-amazon.com/images/I/41gUgegbS3L._SX336_BO1,204,203,200_.jpg"
             alt="Denim Jeans" style="width:100%">
         <h3>Customer Data Platforms</h3>
@@ -54,6 +57,7 @@
         <p><button disabled="disabled" id="btn-add-to-cart" onclick="processAddToCart(this)">Add to cart</button></p>
         <p><button  disabled="disabled" id="btn-purchase" onclick="processPurchasing(this)" style="display: none;">Purchase</button></p>
     </div>
+
     <p>
         Bàn về xu hướng với chủ đề Customer Data Platforms (CDP) — đồng tác giả cuốn sách “Customer Data Platforms: Use
         People Data to Transform the Future of Marketing Engagement “ Chris O’Hara và Martin Kihn.
@@ -110,7 +114,8 @@
             alert('The user-login event is tracked!');
             LeoObserver.recordEventUserLogin(userInfo);
 
-            $('#btn-add-to-cart, #btn-purchase').removeAttr('disabled')
+            $('#btn-add-to-cart, #btn-purchase').removeAttr('disabled');
+            $('#product-info').show()
         }
         // example function to collect add-to-cart item
         function processAddToCart(node) {
@@ -269,6 +274,8 @@
         function leoObserverProxyReady(session) {
             // auto tracking when CDP JS is ready
             LeoObserver.recordEventPageView(parseDataUTM());
+            LeoObserver.addTrackingAllLinks();
+            LeoObserver.addTrackingAllButtons();
 
             // set tracking CDP web visitor ID into all a[href] nodes
             LeoObserverProxy.synchLeoVisitorId(function (vid) {
@@ -298,7 +305,7 @@
                         LeoObserver.recordEventClickDetails(data)
                     })
                 })
-            }, 1500);
+            }, 1700);
         }
 
         // track users when they click any button in the web-page
@@ -310,7 +317,7 @@
                         LeoObserver.recordEventClickDetails(data)
                     })
                 })
-            }, 1600);
+            }, 1800);
         }
     </script>
 </body>
